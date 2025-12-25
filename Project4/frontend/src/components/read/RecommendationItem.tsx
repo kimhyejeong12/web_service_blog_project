@@ -1,34 +1,27 @@
-import { Link } from "react-router";
-import { dummyImage1 } from "../../assets/images/images";
-
-interface RecommendationItemProps {
-    id: number;
-    image?: string;
-    title: string;
-    description: string;
-}
+import { NavLink } from "react-router";
+import { Post } from "../../types/post.d";
 
 export default function RecommendationItem({
     id,
-    image = dummyImage1,
+    thumbnail,
     title,
-    description,
-}: RecommendationItemProps) {
+    desc,
+}: Post) {
     return (
         <li>
-            <Link to={`/read/${id}`}>
+            <NavLink to={`/read/${id}`}>
                 <div className="page__recommend-list">
                     <img
-                        src={image}
+                        src={thumbnail}
                         alt={title}
-                        className="page__recommend-img"
+                        className="page__recommend-image"
                     />
-                    <div>
-                        <h4 className="page__recommend-subtitle">{title}</h4>
-                        <p className="page__recommend-desc">{description}</p>
+                    <div className="page__recommend-content">
+                        <h4 className="page__recommend-title">{title}</h4>
+                        <p className="page__recommend-desc">{desc}</p>
                     </div>
                 </div>
-            </Link>
+            </NavLink>
         </li>
     );
 }

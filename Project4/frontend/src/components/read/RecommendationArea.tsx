@@ -1,38 +1,42 @@
+import { useParams } from "react-router";
+import { useAxios } from "../../hooks/useAxios";
+import { Post } from "../../types/post.d";
 import RecommendationItem from "./RecommendationItem";
-import { dummyImage1 } from "../../assets/images/images";
 
 export default function RecommendationArea() {
-    // 임시 데이터 (추후 API에서 가져올 예정)
-    const recommendations = [
-        {
-            id: 1,
-            image: dummyImage1,
-            title: "Why you don't need more than 3 pieces of clothing",
-            description:
-                "Et vitae, mollis euismod lobortis blandit amet sed amet. Amet ut amet nisl tortor arcu non id nulla mauris neque nisl magna.Et vitae, mollis euismod lobortis blandit amet sed amet. Amet ut amet nisl tortor arcu non id nulla mauris neque nisl magna.Et vitae, mollis euismod lobortis blandit amet sed amet. Amet ut amet nisl tortor arcu non id nulla mauris neque nisl magna.Et vitae, mollis euismod lobortis blandit amet sed amet. Amet ut amet nisl tortor arcu non id nulla mauris neque nisl magna.",
-        },
-        {
-            id: 2,
-            image: dummyImage1,
-            title: "Why you don't need more than 3 pieces of clothing",
-            description:
-                "Et vitae, mollis euismod lobortis blandit amet sed amet. Amet ut amet nisl tortor arcu non id nulla mauris neque nisl magna.Et vitae, mollis euismod lobortis blandit amet sed amet. Amet ut amet nisl tortor arcu non id nulla mauris neque nisl magna.Et vitae, mollis euismod lobortis blandit amet sed amet. Amet ut amet nisl tortor arcu non id nulla mauris neque nisl magna.Et vitae, mollis euismod lobortis blandit amet sed amet. Amet ut amet nisl tortor arcu non id nulla mauris neque nisl magna.",
-        },
-    ];
+    const params = useParams();
+    const { data, isLoading, error } = useAxios<Post[]>(
+        `/posts/${params.id}/related`,
+        []
+    );
+
+    // 받아온 배열 길이가 0인 경우 null 리턴
+    if (data.length === 0) return null;
+
+    if (isLoading) {
+        return (
+            <article className="page__recommend">
+                <p>로딩 중...</p>
+            </article>
+        );
+    }
+
+    if (error) {
+        return (
+            <article className="page__recommend">
+                <p>에러가 발생했습니다: {error}</p>
+            </article>
+        );
+    }
 
     return (
         <article className="page__recommend">
-            <h3 className="page__recommend-title">Recommend Reading</h3>
+            <h3 className="page__recommend-heading">Recommend Reading</h3>
             <ul className="page__recommend-lists">
-                {recommendations.map((item) => (
-                    <RecommendationItem
-                        key={item.id}
-                        id={item.id}
-                        image={item.image}
-                        title={item.title}
-                        description={item.description}
-                    />
-                ))}
+                {data &&
+                    data.map((post) => (
+                        <RecommendationItem key={post.id} {...post} />
+                    ))}
             </ul>
         </article>
     );
