@@ -11,7 +11,7 @@ const app = express();
 // CORS 설정 (클라이언트와 서버가 다른 도메인일 때 필요한 설정)
 const corsOptions = {
   //origin: "http://localhost:5173",
-  origin: "http://113.198.66.75:13122", // JCloud 배포 주소
+  origin: "http://113.198.66.75:10122", // JCloud 배포 주소 (프론트엔드)
   credentials: true, // 인증 정보를 쿠키에 담아 보내는 것을 허용
 };
 
